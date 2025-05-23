@@ -3,34 +3,47 @@ package com.example.addressbookapp.controller;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import java.util.List;
+import com.example.addressbookapp.dto.AddressBookDTO;
+import com.example.addressbookapp.model.AddressBookData;
+import com.example.addressbookapp.service.IAddressBookService;
+import org.springframework.beans.factory.annotation.Autowired;
 
 @RestController
 @RequestMapping("/addressbook")
 public class AddressBookController {
 	
-	@GetMapping("/hello")
-    public ResponseEntity<String> sayHello() {
-        return new ResponseEntity<>("Hello from Address Book App!", HttpStatus.OK);
+	@Autowired
+    private IAddressBookService addressBookService;
+	
+	@GetMapping("/getall")
+    public ResponseEntity<List<AddressBookData>> getAllAddressBookData() {
+        List<AddressBookData> addressBookList = addressBookService.getAllAddressBookData();
+        return new ResponseEntity<>(addressBookList, HttpStatus.OK);
     }
 
-    @GetMapping("/hello/{name}")
-    public ResponseEntity<String> sayHelloByName(@PathVariable String name) {
-        return new ResponseEntity<>("Hello " + name + " from Address Book App!", HttpStatus.OK);
+    @GetMapping("/get/{id}")
+    public ResponseEntity<AddressBookData> getAddressBookData(@PathVariable Long id) {
+        AddressBookData addressBookData = addressBookService.getAddressBookDataById(id);
+        return new ResponseEntity<>(addressBookData, HttpStatus.OK);
     }
 
-    @PostMapping("/hello")
-    public ResponseEntity<String> postHello(@RequestBody String message) {
-        return new ResponseEntity<>("Received POST: " + message, HttpStatus.CREATED);
+    @PostMapping("/create")
+    public ResponseEntity<AddressBookData> createAddressBookData(@RequestBody AddressBookDTO addressBookDTO) {
+        AddressBookData addressBookData = addressBookService.createAddressBookData(addressBookDTO);
+        return new ResponseEntity<>(addressBookData, HttpStatus.CREATED);
     }
 
-    @PutMapping("/hello/{id}")
-    public ResponseEntity<String> putHello(@PathVariable Long id, @RequestBody String message) {
-        return new ResponseEntity<>("Updated ID " + id + " with: " + message, HttpStatus.OK);
+    @PutMapping("/update/{id}")
+    public ResponseEntity<AddressBookData> updateAddressBookData(@PathVariable Long id, @RequestBody AddressBookDTO addressBookDTO) {
+        AddressBookData addressBookData = addressBookService.updateAddressBookData(id, addressBookDTO);
+        return new ResponseEntity<>(addressBookData, HttpStatus.OK);
     }
 
-    @DeleteMapping("/hello/{id}")
-    public ResponseEntity<String> deleteHello(@PathVariable Long id) {
-        return new ResponseEntity<>("Deleted ID: " + id, HttpStatus.NO_CONTENT);
+    @DeleteMapping("/delete/{id}")
+    public ResponseEntity<String> deleteAddressBookData(@PathVariable Long id) {
+        addressBookService.deleteAddressBookData(id);
+        return new ResponseEntity<>("Deleted successfully!", HttpStatus.NO_CONTENT);
     }
 
 }
