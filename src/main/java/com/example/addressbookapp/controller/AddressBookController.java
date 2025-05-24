@@ -9,6 +9,7 @@ import com.example.addressbookapp.dto.AddressBookDTO;
 import com.example.addressbookapp.model.AddressBookData;
 import com.example.addressbookapp.service.IAddressBookService;
 import org.springframework.beans.factory.annotation.Autowired;
+import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping("/addressbook")
@@ -37,14 +38,14 @@ public class AddressBookController {
     }
 
     @PostMapping("/create")
-    public ResponseEntity<AddressBookData> createAddressBookData(@RequestBody AddressBookDTO addressBookDTO) {
+    public ResponseEntity<AddressBookData> createAddressBookData(@Valid @RequestBody AddressBookDTO addressBookDTO) {
         log.info("Controller: Handling POST request to create new address book data: {}", addressBookDTO);
         AddressBookData addressBookData = addressBookService.createAddressBookData(addressBookDTO);
         return new ResponseEntity<>(addressBookData, HttpStatus.CREATED); // Return 201 Created
     }
 
     @PutMapping("/update/{id}")
-    public ResponseEntity<AddressBookData> updateAddressBookData(@PathVariable("id") Long id, @RequestBody AddressBookDTO addressBookDTO) {
+    public ResponseEntity<AddressBookData> updateAddressBookData(@PathVariable("id") Long id, @Valid @RequestBody AddressBookDTO addressBookDTO) {
         log.info("Controller: Handling PUT request to update address book data for ID: {}", id);
         AddressBookData addressBookData = addressBookService.updateAddressBookData(id, addressBookDTO);
         if (addressBookData != null) {
