@@ -25,5 +25,12 @@ public class AddressbookExceptionHandler {
 		ResponseDTO responseDTO = new ResponseDTO("Validation Failed", errorMessages);
 		return new ResponseEntity<>(responseDTO, HttpStatus.BAD_REQUEST);
 	}
+	
+	@ExceptionHandler(AddressBookException.class)
+    public ResponseEntity<ResponseDTO> handleAddressBookException(AddressBookException exception) {
+        log.error("Address Book Exception: {}", exception.getMessage());
+        ResponseDTO responseDTO = new ResponseDTO("Exception while processing REST request", exception.getMessage());
+        return new ResponseEntity<>(responseDTO, HttpStatus.NOT_FOUND); // Returns 404 Not Found status
+    }
 
 }
