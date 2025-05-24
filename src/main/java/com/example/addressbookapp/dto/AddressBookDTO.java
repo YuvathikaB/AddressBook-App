@@ -1,18 +1,28 @@
 package com.example.addressbookapp.dto; // Ensure this matches your package structure
 
 import java.util.Objects; // Needed for Objects.equals and Objects.hash
+import jakarta.validation.constraints.*;
 
 public class AddressBookDTO {
+	@NotBlank(message = "First Name cannot be blank") 
+    @Pattern(regexp = "^[A-Z]{1}[a-zA-Z\\s]{2,}$", message = "First Name Invalid: Should start with a capital letter and have at least 3 characters")
     private String firstName;
-    private String lastName;
-    private String phoneNumber;
-    private String email;
 
-    // --- Constructor (No-argument constructor - important for Spring/Jackson) ---
+    @NotBlank(message = "Last Name cannot be blank")
+    @Pattern(regexp = "^[A-Z]{1}[a-zA-Z\\s]{2,}$", message = "Last Name Invalid: Should start with a capital letter and have at least 3 characters")
+    private String lastName;
+
+    @Pattern(regexp = "^[0-9]{10}$", message = "Phone Number Invalid: Must be 10 digits")
+    private String phoneNumber;
+
+    @Email(message = "Email Invalid: Must be a valid email format")
+    @NotBlank(message = "Email cannot be blank")
+    private String email;
+   
+
     public AddressBookDTO() {
     }
 
-    // --- Constructor with all fields (optional, but often useful) ---
     public AddressBookDTO(String firstName, String lastName, String phoneNumber, String email) {
         this.firstName = firstName;
         this.lastName = lastName;
@@ -20,7 +30,6 @@ public class AddressBookDTO {
         this.email = email;
     }
 
-    // --- Getters ---
     public String getFirstName() {
         return firstName;
     }
@@ -37,7 +46,6 @@ public class AddressBookDTO {
         return email;
     }
 
-    // --- Setters ---
     public void setFirstName(String firstName) {
         this.firstName = firstName;
     }
@@ -54,7 +62,6 @@ public class AddressBookDTO {
         this.email = email;
     }
 
-    // --- toString() ---
     @Override
     public String toString() {
         return "AddressBookDTO{" +
@@ -65,7 +72,6 @@ public class AddressBookDTO {
                '}';
     }
 
-    // --- equals() ---
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -77,7 +83,6 @@ public class AddressBookDTO {
                Objects.equals(email, that.email);
     }
 
-    // --- hashCode() ---
     @Override
     public int hashCode() {
         return Objects.hash(firstName, lastName, phoneNumber, email);
